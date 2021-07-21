@@ -81,8 +81,6 @@ jobs:
         rm -rf OpenClash/
         cd base-files/files
         mkdir -p etc/openclash/core && cd etc/openclash/core
-        curl -L https://github.com/vernesong/OpenClash/blob/master/core-lateset/dev/clash-linux-mipsle-softfloat.tar.gz | tar zxf -
-        chmod +x clash
         
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
