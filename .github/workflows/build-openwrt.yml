@@ -30,7 +30,7 @@ env:
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: false
-  UPLOAD_RELEASE: false
+  UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
 
 jobs:
@@ -67,7 +67,23 @@ jobs:
         chmod +x $DIY_P1_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P1_SH
-
+        
+    - name: Install Extra Packages
+      run: |
+        cd openwrt/package
+        git clone https://github.com/rufengsuixing/luci-app-adguardhome
+    
+        rm -rf lean/luci-theme-argon
+        git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git
+        
+        git clone https://github.com/vernesong/OpenClash
+        mv OpenClash/luci-app-openclash/ .
+        rm -rf OpenClash/
+        cd base-files/files
+        mkdir -p etc/openclash/core && cd etc/openclash/core
+        curl -L https://github.com/vernesong/OpenClash/blob/master/core-lateset/dev/clash-linux-mips-softfloat.tar.gz | tar zxf -
+        chmod +x clash
+        
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
 
